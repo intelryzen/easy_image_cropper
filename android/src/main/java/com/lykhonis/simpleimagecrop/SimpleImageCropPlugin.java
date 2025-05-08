@@ -32,15 +32,18 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class SimpleImageCropPlugin implements
         FlutterPlugin,
-        MethodChannel.MethodCallHandler,
+        MethodCallHandler,
         ActivityAware,
         RequestPermissionsResultListener {
 
@@ -57,7 +60,7 @@ public class SimpleImageCropPlugin implements
         channel.setMethodCallHandler(this);
     }
 
-    // ActivityAware ➞ get our Activity and register for permission callbacks
+    // ActivityAware: capture Activity and register for permission callbacks
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         this.activity = binding.getActivity();
@@ -84,7 +87,7 @@ public class SimpleImageCropPlugin implements
     }
 
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         switch (call.method) {
             case "cropImage":
                 cropImage(
